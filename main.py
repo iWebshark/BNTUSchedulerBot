@@ -88,15 +88,20 @@ def get_today_schedule(message: telebot.types.Message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def move_to_selected_day(call: telebot.types.CallbackQuery):
-    date_str = call.data.split("-")[1]
-    if date_str == "today":
-        today = datetime.datetime.today()
-        date_str = today.strftime('%d.%m.%Y')
-    text = utils.get_one_date_from_str(db, call.from_user.id, date_str)
-    buttons = utils.get_schedule_buttons(date_str)
-    bot.edit_message_text(text, call.message.chat.id, call.message.message_id,
-                          parse_mode='html',
-                          reply_markup=buttons)
+    if db.get_user_group(call.from_user.id) is None:
+        buttons = utils.get_buttons_by_options(db.get_available_groups())
+        bot.send_message(call.message.chat.id, "Группа не выбрана!\nВыбери из списка ниже\n", reply_markup=buttons)
+        show_available_groups(call.message)
+    else:
+        date_str = call.data.split("-")[1]
+        if date_str == "today":
+            today = datetime.datetime.today()
+            date_str = today.strftime('%d.%m.%Y')
+        text = utils.get_one_date_from_str(db, call.from_user.id, date_str)
+        buttons = utils.get_schedule_buttons(date_str)
+        bot.edit_message_text(text, call.message.chat.id, call.message.message_id,
+                              parse_mode='html',
+                              reply_markup=buttons)
 
 
 @bot.message_handler(content_types=['text'])
