@@ -3,11 +3,10 @@ import telebot
 import config
 import utils
 import datetime
-from sqliter import SQLiter
-import logging
+from pgres import Database
 
 bot = telebot.TeleBot(config.BOT_TOKEN)
-db = SQLiter()
+db = Database()
 
 
 @bot.message_handler(commands=['start'], func=lambda message: message.chat.type == "private")
@@ -110,9 +109,4 @@ def process_text_message(message: telebot.types.Message):
 
 
 if __name__ == '__main__':
-    log_file = logging.FileHandler("logs.log")
-    formatter = logging.Formatter('%(asctime)s - %(message)s', datefmt='%d.%m.%Y %H:%M:%S')
-    log_file.setFormatter(formatter)
-    telebot.logger.addHandler(log_file)
-    telebot.logger.setLevel(level=logging.ERROR)
     bot.polling(none_stop=True)
