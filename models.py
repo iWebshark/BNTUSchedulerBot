@@ -41,7 +41,7 @@ class BNTUClass:
         t_end = time[1].split(":")
         begin = datetime.time(int(t_begin[0]), int(t_begin[1]))
         end = datetime.time(int(t_end[0]), int(t_end[1]))
-        self.__time = f"{begin.strftime('%#H:%M')}-{end.strftime('%#H:%M')}"
+        self.__time = f"{begin.strftime('%-H:%M')}-{end.strftime('%-H:%M')}"
 
     def __str__(self) -> str:
         text = f"{self.class_type[self.type]}<b>{self.time}</b> | {self.name} | <b>{self.place}</b>\n" \
