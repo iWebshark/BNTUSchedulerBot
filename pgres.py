@@ -57,7 +57,7 @@ class Database:
     def get_day_schedule(self, user_id, week_day, week_num):
         group = self.get_user_group(user_id)
         weekday = weekdays[week_day]
-        query = "SELECT * FROM schedule WHERE day= %s AND group_id = %s AND (week is NULL or week = '%s') " \
+        query = "SELECT * FROM schedule WHERE day = '%s' AND group_id = %s AND (week is NULL or week = '%s') " \
                 "ORDER BY time_begin"
         self.cursor.execute(query, (weekday, group[1], week_num))
         data = self.cursor.fetchall()
