@@ -8,10 +8,10 @@ class Database:
 
     def __init__(self):
         self.connection = psycopg2.connect(
-            host="localhost",
-            database="scheduler",
-            user="postgres",
-            password="anuBis")
+            host="ec2-54-247-71-245.eu-west-1.compute.amazonaws.com",
+            database="d8agj8uoqdr5hm",
+            user="gufyrauhrcosoq",
+            password="ad0480690fea6bde2d6c05cac7e41eb472f596ee3e62c1e9bc61baca9a0bd1f8")
         self.connection.set_session(autocommit=True)
         self.cursor = self.connection.cursor()
 
