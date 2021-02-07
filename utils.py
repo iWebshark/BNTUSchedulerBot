@@ -75,9 +75,9 @@ def get_one_day_schedule(db, user_id, date: datetime):
 def get_week_number(date: datetime):
     week = date.date().isocalendar()[1]
     if (week % 2) == 0:
-        return 1
-    else:
         return 2
+    else:
+        return 1
 
 
 def same_dates(date_str):
