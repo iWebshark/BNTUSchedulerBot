@@ -84,14 +84,3 @@ def same_dates(date_str):
     split = date_str.split(".")
     date = datetime.datetime(int(split[2]), int(split[1]), int(split[0]))
     return date.date() == datetime.datetime.today().date()
-
-
-def send_messages(db, bot):
-    date = datetime.datetime.today()
-    if date.weekday() != 6:
-        users = db.get_users()
-        for user in users:
-            text = get_today_schedule(db, user[0])
-
-
-

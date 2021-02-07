@@ -1,12 +1,28 @@
 import re
 import telebot
-import config
 import utils
 import datetime
 from pgres import Database
+import os
+from flask import Flask, request
 
-bot = telebot.TeleBot(config.BOT_TOKEN)
+secret = 'tth1uomktubXBGEX8FsZ04vh0s3PRMll'
+url = 'https://bntu-scheduler-bot.herokuapp.com/' + secret
+TOKEN = os.environ.get('BOT_TOKEN')
+bot = telebot.TeleBot(TOKEN)
 db = Database()
+
+bot.remove_webhook()
+bot.set_webhook(url=url)
+
+app = Flask(__name__)
+
+
+@app.route('/' + secret, methods=['POST'])
+def webhook():
+    update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
+    bot.process_new_updates([update])
+    return 'ok', 200
 
 
 @bot.message_handler(commands=['start'], func=lambda message: message.chat.type == "private")
@@ -109,4 +125,4 @@ def process_text_message(message: telebot.types.Message):
 
 
 if __name__ == '__main__':
-    bot.polling(none_stop=True)
+    app.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
