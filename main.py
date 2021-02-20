@@ -1,4 +1,5 @@
 import re
+import time
 import telebot
 import utils
 import datetime
@@ -13,6 +14,8 @@ TOKEN = os.environ.get('BOT_TOKEN')
 bot = telebot.TeleBot(TOKEN)
 db = Database()
 
+bot.remove_webhook()
+time.sleep(5)
 bot.set_webhook(url=url)
 
 app = Flask(__name__)
