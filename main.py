@@ -11,7 +11,7 @@ import bntu_cache
 secret = 'tth1uomktubXBGEX8FsZ04vh0s3PRMll'
 url = 'https://bntu-scheduler-bot.herokuapp.com/' + secret
 TOKEN = os.environ.get('BOT_TOKEN')
-bot = telebot.TeleBot(TOKEN)
+bot = telebot.TeleBot('1309832806:AAGzrsihXE6REnUvxdUtdrdK5CKWHosW_Bg')
 db = Database()
 
 bot.remove_webhook()

@@ -24,7 +24,7 @@ def get_user_name(user: telebot.types.User) -> str:
 
 
 def get_schedule_variants_buttons():
-    markup = telebot.types.ReplyKeyboardMarkup()
+    markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     this_week = telebot.types.KeyboardButton('Текущая неделя')
     next_week = telebot.types.KeyboardButton('Следующая неделя')
     today = telebot.types.KeyboardButton('Сегодня')
@@ -85,7 +85,9 @@ def get_week_schedule(week_type) -> str:
     text = ""
     iterator = 0
     for day_schedule in week_schedule:
+        text += "➖➖➖➖➖➖➖➖➖\n\n"
         text += get_schedule_text(dates[iterator], day_schedule, week_number)
+        iterator += 1
     return text
 
 
@@ -93,11 +95,11 @@ def get_schedule_text(date, schedule, week_num):
     text = ""
     if date.date() == datetime.date.today():
         text += "<b>(Сегодня)</b>\n"
-    text += f"🗓{weekdays[date.weekday()]} {date.strftime('%d.%m.%Y')} <i>{week_num} неделя</i>\n\n"
+    text += f"🗓<b>{weekdays[date.weekday()]} {date.strftime('%d.%m.%Y')} <i>{week_num} неделя</i></b>\n\n"
     if len(schedule.day_schedule) == 0:
-        text += "<b>Занятий нет</b>"
+        text += "<b>Занятий нет</b>\n\n"
     else:
-        text += schedule
+        text += str(schedule)
     return text
 
 

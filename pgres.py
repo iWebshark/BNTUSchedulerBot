@@ -50,8 +50,8 @@ class Database:
 
     def get_week_schedule(self, week_num) -> list:
         week_schedule = list()
-        for day_num, day_name in utils.weekdays:
-            day_schedule = self.get_day_schedule(day_name, week_num)
+        for day_num, day_name in utils.weekdays.items():
+            day_schedule = self.get_day_schedule(day_name.lower(), week_num)
             week_schedule.append(day_schedule)
         return week_schedule
 

@@ -3,14 +3,14 @@ import datetime
 
 class User:
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.__username = None
         self.__user_id = None
         self.__chat_id = None
 
     @property
     def username(self):
-        return self.username
+        return self.__username
 
     @username.setter
     def username(self, username):
@@ -18,7 +18,7 @@ class User:
 
     @property
     def user_id(self):
-        return self.user_id
+        return self.__user_id
 
     @user_id.setter
     def user_id(self, user_id):
@@ -26,7 +26,7 @@ class User:
 
     @property
     def chat_id(self):
-        return self.chat_id
+        return self.__chat_id
 
     @chat_id.setter
     def chat_id(self, chat_id):
