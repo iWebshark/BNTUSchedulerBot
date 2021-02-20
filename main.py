@@ -13,7 +13,6 @@ TOKEN = os.environ.get('BOT_TOKEN')
 bot = telebot.TeleBot(TOKEN)
 db = Database()
 
-bot.remove_webhook()
 bot.set_webhook(url=url)
 
 app = Flask(__name__)
