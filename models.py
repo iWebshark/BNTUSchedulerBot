@@ -1,6 +1,26 @@
 import datetime
 
 
+class BNTUDaySchedule:
+
+    def __init__(self) -> None:
+        self.__day_schedule: list = list()
+
+    @property
+    def day_schedule(self):
+        return self.__day_schedule
+
+    @day_schedule.setter
+    def day_schedule(self, day_schedule: list):
+        self.__day_schedule = day_schedule
+
+    def __str__(self) -> str:
+        text = ''
+        for cl in self.day_schedule:
+            text += f"{cl}\n\n"
+        return text
+
+
 class BNTUClass:
     class_types = {'практ': 'Практика', 'лек': 'Лекция', None: None}
     class_type = {'Практика': '🟠', 'Лекция': '🟢', None: '🔵'}

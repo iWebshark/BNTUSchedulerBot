@@ -1,7 +1,8 @@
 import models
 import psycopg2
+import utils
 
-weekdays = {0: 'пн', 1: 'вт', 2: 'ср', 3: 'чт', 4: 'пт', 5: 'сб', 6: 'вс'}
+schedule_cache = dict()
 
 
 class Database:
@@ -16,50 +17,29 @@ class Database:
         self.cursor = self.connection.cursor()
 
     def get_user(self, user_id):
-        query = "SELECT * FROM users WHERE user_id = %s"
+        query = "SELECT * FROM users WHERE chat_id = %s"
         self.cursor.execute(query, (user_id,))
         return self.cursor.fetchone()
 
-    def get_users(self):
-        query = "SELECT * FROM users"
-        self.cursor.execute(query)
-        return self.cursor.fetchall()
+    def reg_user(self, chat_id, user_id, username):
+        query = "INSERT INTO users VALUES (%s, %s, %s)"
+        self.cursor.execute(query, (chat_id, user_id, username))
 
-    def get_available_groups(self):
-        query = "SELECT * FROM groups"
-        groups = []
-        self.cursor.execute(query)
-        for group in self.cursor.fetchall():
-            groups.append(group[0])
-        return groups
+    def update_user(self, chat_id, user_id, username):
+        query = "UPDATE users SET chat_id = %s, username = %s WHERE user_id = %s"
+        self.cursor.execute(query, (chat_id, username, user_id))
 
-    def reg_user(self, user_id, group_id):
-        if self.get_user_group(user_id) is None:
-            query = "INSERT INTO users VALUES (%s, %s)"
-            self.cursor.execute(query, (user_id, group_id))
-        else:
-            self.update_user_group(user_id, group_id)
+    def get_week_schedule(self, week_num) -> list:
+        week_schedule = list()
+        for day_num, day_name in utils.weekdays:
+            day_schedule = self.get_day_schedule(day_name, week_num)
+            week_schedule.append(day_schedule)
+        return week_schedule
 
-    def get_user_group(self, user_id):
-        query = "SELECT * FROM users WHERE user_id = %s"
-        self.cursor.execute(query, (user_id,))
-        return self.cursor.fetchone()
-
-    def update_user_group(self, user_id, group_id):
-        query = "UPDATE users SET group_id = %s WHERE user_id = %s"
-        return self.cursor.execute(query, (group_id, user_id))
-
-    def get_group(self, group_id):
-        query = "SELECT * FROM groups WHERE group_id = %s"
-        self.cursor.execute(query, (group_id,))
-        return self.cursor.fetchone()
-
-    def get_day_schedule(self, user_id, week_day, week_num):
-        group = self.get_user_group(user_id)
-        weekday = weekdays[week_day]
-        query = "SELECT * FROM schedule WHERE day = %s AND group_id = %s AND (week is NULL or week = '%s') " \
+    def get_day_schedule(self, weekday, week_num) -> models.BNTUDaySchedule:
+        query = "SELECT * FROM schedule WHERE day = %s AND (week is NULL or week = '%s') " \
                 "ORDER BY time_begin"
-        self.cursor.execute(query, (weekday, group[1], week_num))
+        self.cursor.execute(query, (weekday, week_num))
         data = self.cursor.fetchall()
         classes = []
         for row in data:
@@ -74,4 +54,6 @@ class Database:
             bntu_class.addition = row[10]
 
             classes.append(bntu_class)
-        return classes
+        schedule = models.BNTUDaySchedule()
+        schedule.day_schedule = classes
+        return schedule
