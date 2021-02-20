@@ -1,18 +1,17 @@
 import datetime
 import telebot
 import bntu_cache
-from main import db
 
 weekdays = {0: 'Пн', 1: 'Вт', 2: 'Ср', 3: 'Чт', 4: 'Пт', 5: 'Сб', 6: 'Вс'}
 
 
 def reg_or_update_user(message: telebot.types.Message):
-    user = db.get_user(message.from_user.id)
+    user = bntu_cache.get_user(message.from_user.id)
     username = get_user_name(message.from_user)
     if user is None:
-        db.reg_user(message.chat.id, message.from_user.id, username)
-    elif user[0] != str(message.chat.id) or user[2] != username:
-        db.update_user(message.chat.id, message.from_user.id, username)
+        bntu_cache.reg_user(message.chat.id, message.from_user.id, username)
+    elif user.chat_id != str(message.chat.id) or user.username != username:
+        bntu_cache.update_user(message.chat.id, message.from_user.id, username)
 
 
 def get_user_name(user: telebot.types.User) -> str:

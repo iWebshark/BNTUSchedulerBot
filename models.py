@@ -1,6 +1,38 @@
 import datetime
 
 
+class User:
+
+    def __init__(self) -> None:
+        self.__username = None
+        self.__user_id = None
+        self.__chat_id = None
+
+    @property
+    def username(self):
+        return self.username
+
+    @username.setter
+    def username(self, username):
+        self.__username = username
+
+    @property
+    def user_id(self):
+        return self.user_id
+
+    @user_id.setter
+    def user_id(self, user_id):
+        self.__user_id = user_id
+
+    @property
+    def chat_id(self):
+        return self.chat_id
+
+    @chat_id.setter
+    def chat_id(self, chat_id):
+        self.__chat_id = chat_id
+
+
 class BNTUDaySchedule:
 
     def __init__(self) -> None:

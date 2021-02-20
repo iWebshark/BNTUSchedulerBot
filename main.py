@@ -5,6 +5,7 @@ import datetime
 from pgres import Database
 import os
 from flask import Flask, request
+import bntu_cache
 
 secret = 'tth1uomktubXBGEX8FsZ04vh0s3PRMll'
 url = 'https://bntu-scheduler-bot.herokuapp.com/' + secret
@@ -16,6 +17,12 @@ bot.remove_webhook()
 bot.set_webhook(url=url)
 
 app = Flask(__name__)
+
+
+@app.route('/' + secret + '/cache/users', methods=['GET'])
+def delete_users_cache():
+    bntu_cache.users_cache.clear()
+    return "Users cache cleared!"
 
 
 @app.route('/' + secret, methods=['POST'])
@@ -74,6 +81,8 @@ def move_to_selected_day(call: telebot.types.CallbackQuery):
 @bot.message_handler(commands=['this_week'])
 @bot.message_handler(func=lambda message: message.text == 'Текущая неделя')
 def get_week_schedule(message: telebot.types.Message):
+    utils.reg_or_update_user(message)
+
     schedule_text = utils.get_week_schedule('this_week')
     bot.send_message(message.chat.id, schedule_text, parse_mode='html')
 
@@ -81,6 +90,8 @@ def get_week_schedule(message: telebot.types.Message):
 @bot.message_handler(commands=['next_week'])
 @bot.message_handler(func=lambda message: message.text == 'Следующая неделя')
 def get_week_schedule(message: telebot.types.Message):
+    utils.reg_or_update_user(message)
+
     schedule_text = utils.get_week_schedule('next_week')
     bot.send_message(message.chat.id, schedule_text, parse_mode='html')
 

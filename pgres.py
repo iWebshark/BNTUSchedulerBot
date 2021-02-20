@@ -16,13 +16,32 @@ class Database:
         self.connection.set_session(autocommit=True)
         self.cursor = self.connection.cursor()
 
+    def get_all_users(self):
+        query = "SELECT * FROM users"
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
+        users = dict()
+        for row in data:
+            user = models.User()
+            user.user_id = row[0]
+            user.chat_id = row[1]
+            user.username = row[2]
+
+            users[user.user_id] = user
+        return users
+
     def get_user(self, user_id):
         query = "SELECT * FROM users WHERE chat_id = %s"
         self.cursor.execute(query, (user_id,))
-        return self.cursor.fetchone()
+        data = self.cursor.fetchone()
+        user = models.User()
+        user.user_id = data[0]
+        user.chat_id = data[1]
+        user.username = data[2]
+        return user
 
     def reg_user(self, chat_id, user_id, username):
-        query = "INSERT INTO users VALUES (%s, %s, %s)"
+        query = "INSERT INTO users (chat_id, user_id, username) VALUES (%s, %s, %s)"
         self.cursor.execute(query, (chat_id, user_id, username))
 
     def update_user(self, chat_id, user_id, username):
@@ -44,14 +63,14 @@ class Database:
         classes = []
         for row in data:
             bntu_class = models.BNTUClass()
-            bntu_class.name = row[2]
-            bntu_class.type = row[3]
-            bntu_class.teachers = row[4]
-            bntu_class.place = row[5]
-            bntu_class.week = row[6]
-            bntu_class.day = row[7]
-            bntu_class.time = (row[8], row[9])
-            bntu_class.addition = row[10]
+            bntu_class.name = row[1]
+            bntu_class.type = row[2]
+            bntu_class.teachers = row[3]
+            bntu_class.place = row[4]
+            bntu_class.week = row[5]
+            bntu_class.day = row[6]
+            bntu_class.time = (row[7], row[8])
+            bntu_class.addition = row[9]
 
             classes.append(bntu_class)
         schedule = models.BNTUDaySchedule()
