@@ -15,7 +15,7 @@ bot = telebot.TeleBot(TOKEN)
 db = Database()
 
 bot.remove_webhook()
-time.sleep(5)
+time.sleep(1)
 bot.set_webhook(url=url)
 
 app = Flask(__name__)

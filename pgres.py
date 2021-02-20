@@ -31,7 +31,7 @@ class Database:
         return users
 
     def get_user(self, user_id):
-        query = "SELECT * FROM users WHERE chat_id = %s"
+        query = "SELECT * FROM users WHERE user_id = %s"
         self.cursor.execute(query, (user_id,))
         data = self.cursor.fetchone()
         user = models.User()
