@@ -8,10 +8,10 @@ import os
 from flask import Flask, request
 import bntu_cache
 
-secret = 'tth1uomktubXBGEX8FsZ04vh0s3PRMll'
-url = 'https://bntu-scheduler-bot.herokuapp.com/' + secret
+secret = os.environ.get('SECRET_KEY')
+url = os.environ.get('SERVER_URL') + secret
 TOKEN = os.environ.get('BOT_TOKEN')
-bot = telebot.TeleBot('1309832806:AAGzrsihXE6REnUvxdUtdrdK5CKWHosW_Bg')
+bot = telebot.TeleBot(os.environ.get('TELEGRAM_TOKEN'))
 db = Database()
 
 bot.remove_webhook()
